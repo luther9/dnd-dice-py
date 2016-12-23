@@ -6,9 +6,13 @@ from random import Random
 parser = argparse.ArgumentParser()
 parser.add_argument(
     'n', nargs='?', default=1, type=int, help='The number of dice to roll')
+parser.add_argument(
+    'd', nargs='?', default=20, type=int, help='The number of sides on the die')
 
 # Main program
 
 rng = Random()
 args = parser.parse_args()
-print([rng.randrange(20)+1 for _ in range(args.n)])
+roll = [rng.randrange(args.d)+1 for _ in range(args.n)]
+print(roll)
+print(sum(roll))
