@@ -1,0 +1,13 @@
+#!/usr/bin/python3
+
+import argparse
+from random import Random
+
+parser = argparse.ArgumentParser()
+parser.add_argument('n', default=1, type=int, help='The number of dice to roll')
+
+# Main program
+
+rng = Random()
+args = parser.parse_args()
+print([rng.randrange(20)+1 for _ in range(args.n)])
