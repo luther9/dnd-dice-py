@@ -4,7 +4,8 @@ import argparse
 from random import Random
 
 parser = argparse.ArgumentParser()
-parser.add_argument('n', default=1, type=int, help='The number of dice to roll')
+parser.add_argument(
+    'n', nargs='?', default=1, type=int, help='The number of dice to roll')
 
 # Main program
 
