@@ -17,11 +17,14 @@ def roll_dice(rng, n, d):
 
 parser = argparse.ArgumentParser()
 parser.add_argument(
-    'n', nargs='?', default=1, type=int, help='The number of dice to roll')
+    'n', nargs='?', default=1, type=int,
+    help='The number of dice to roll')
 parser.add_argument(
     'd', nargs='?', default=20, type=int,
     help='The number of sides on each die')
-parser.add_argument('-c', action='store_true', help='Generate character stats')
+parser.add_argument(
+    '-c', action='store_true',
+    help='Generate character stats')
 
 
 def main():
