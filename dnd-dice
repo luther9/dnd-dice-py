@@ -25,11 +25,14 @@ parser.add_argument(
 parser.add_argument(
     '-c', action='store_true',
     help='Generate character stats')
+parser.add_argument(
+    '-s', type=int,
+    help='The RNG seed')
 
 
 def main():
     args = parser.parse_args()
-    rng = Random()
+    rng = Random(args.s)
     if args.c:
         print(reverse_sort(sum(roll_dice(rng, 4, 6)[:3]) for _ in range(6)))
     else:
