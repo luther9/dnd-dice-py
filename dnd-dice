@@ -10,9 +10,7 @@ def reverse_sort(iterable):
 
 
 def roll_dice(rng, n, d):
-    roll = reverse_sort(rng.randrange(d)+1 for _ in range(n))
-    print(roll)
-    return roll
+    return reverse_sort(rng.randrange(d)+1 for _ in range(n))
 
 
 parser = argparse.ArgumentParser()
@@ -37,5 +35,6 @@ def main():
         print(reverse_sort(sum(roll_dice(rng, 4, 6)[:3]) for _ in range(6)))
     else:
         roll = roll_dice(rng, args.n, args.d)
+        print(roll)
         print(sum(roll))
 main()
