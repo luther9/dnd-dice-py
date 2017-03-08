@@ -3,6 +3,8 @@
 import argparse
 from random import Random
 
+abilities = 'Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'
+
 
 def reverse_sort(iterable):
     '''People will hate the RNG less if the bigger numbers come first.'''
@@ -13,6 +15,11 @@ def roll_dice(rng, n, d):
     return reverse_sort(rng.randrange(d)+1 for _ in range(n))
 
 
+def ability_score(rng):
+    roll = roll_dice(rng, 4, 6)
+    return roll, sum(roll[:3])
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument(
     'n', nargs='?', default=1, type=int,
@@ -21,8 +28,11 @@ parser.add_argument(
     'd', nargs='?', default=20, type=int,
     help='The number of sides on each die')
 parser.add_argument(
-    '-c', action='store_true',
+    '-c', action='store_const', const='unordered',
     help='Generate character stats')
+parser.add_argument(
+    '-r', dest='c', action='store_const', const='ordered',
+    help='Generate fully random character stats')
 parser.add_argument(
     '-s', type=int,
     help='The RNG seed')
@@ -31,13 +41,17 @@ parser.add_argument(
 def main():
     args = parser.parse_args()
     rng = Random(args.s)
-    if args.c:
+    if args.c == 'unordered':
         scores = []
         for _ in range(6):
-            roll = roll_dice(rng, 4, 6)
+            roll, score = ability_score(rng)
             print(roll)
-            scores.append(sum(roll[:3]))
+            scores.append(score)
         print(reverse_sort(scores))
+    elif args.c == 'ordered':
+        for ability in abilities:
+            roll, score = ability_score(rng)
+            print('{0} {1:2} {2}'.format(ability, score, roll))
     else:
         roll = roll_dice(rng, args.n, args.d)
         print(roll)
