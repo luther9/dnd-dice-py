@@ -5,22 +5,8 @@ from random import Random
 
 abilities = 'Str', 'Dex', 'Con', 'Int', 'Wis', 'Cha'
 
-
-def reverse_sort(iterable):
-    '''People will hate the RNG less if the bigger numbers come first.'''
-    return sorted(iterable, reverse=True)
-
-
-def roll_dice(rng, n, d):
-    return reverse_sort(rng.randrange(d)+1 for _ in range(n))
-
-
-def ability_score(rng):
-    roll = roll_dice(rng, 4, 6)
-    return roll, sum(roll[:3])
-
-
-parser = argparse.ArgumentParser()
+parser = argparse.ArgumentParser(add_help=False)
+parser.add_argument('-help', action='help')
 parser.add_argument(
     'n', nargs='?', default=1, type=int,
     help='The number of dice to roll')
@@ -28,32 +14,53 @@ parser.add_argument(
     'd', nargs='?', default=20, type=int,
     help='The number of sides on each die')
 parser.add_argument(
-    '-c', action='store_const', const='unordered',
+    '-c', action='store_true',
     help='Generate character stats')
 parser.add_argument(
-    '-r', dest='c', action='store_const', const='ordered',
-    help='Generate fully random character stats')
+    '-sort',
+    action='store_true',
+    help='Sort the output',
+)
 parser.add_argument(
     '-s', type=int,
     help='The RNG seed')
 
 
+def reverse_sort(iterable):
+    '''People will hate the RNG less if the bigger numbers come first.'''
+    return sorted(iterable, reverse=True)
+
+
+def roll_dice(rng, n, d):
+    return tuple(rng.randrange(d)+1 for _ in range(n))
+
+
+def ability_score(rng):
+    roll = roll_dice(rng, 4, 6)
+    return roll, sum(sorted(roll)[1:])
+
+
+def printIter(iterable):
+    """Print each item on a line."""
+    for x in iterable:
+        print(x)
+
+
 def main():
     args = parser.parse_args()
     rng = Random(args.s)
-    if args.c == 'unordered':
-        scores = []
-        for _ in range(6):
-            roll, score = ability_score(rng)
-            print(roll)
-            scores.append(score)
-        print(reverse_sort(scores))
-    elif args.c == 'ordered':
-        for ability in abilities:
-            roll, score = ability_score(rng)
-            print('{0} {1:2} {2}'.format(ability, score, roll))
+    if args.c:
+        stats = tuple(ability_score(rng) for _ in range(6))
+        if args.sort:
+            printIter(a[0] for a in stats)
+            print(reverse_sort(s[1] for s in stats))
+        else:
+            printIter(
+                f'{name} {a[1]:2} {a[0]}'
+                for name, a in zip(abilities, stats)
+            )
     else:
         roll = roll_dice(rng, args.n, args.d)
-        print(roll)
+        print(reverse_sort(roll) if args.sort else roll)
         print(sum(roll))
 main()
