@@ -56,8 +56,10 @@ def main():
             print(reverse_sort(s[1] for s in stats))
         else:
             printIter(
-                f'{name} {a[1]:2} {a[0]}'
-                for name, a in zip(abilities, stats)
+                f'{name} {score:2} {roll}'
+                for name, roll, score in (
+                    (name, a[0], a[1]) for name, a in zip(abilities, stats)
+                )
             )
     else:
         roll = roll_dice(rng, args.n, args.d)
