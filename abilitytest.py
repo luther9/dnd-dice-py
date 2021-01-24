@@ -11,7 +11,7 @@ def abilityScore(rng):
 
 
 def character(rng):
-    return tuple(abilityScore(rng) for _ in range(6))
+    return sorted((abilityScore(rng) for _ in range(6)), reverse=True)
 
 
 def printCharacter(c):
@@ -20,16 +20,15 @@ def printCharacter(c):
 
 
 def main(n):
-    maxScore = 0
+    bestCharacter = [0] * 6
     rng = Random(1)
     for i in range(int(n)):
         c = character(rng)
-        score = sum(c)
-        if score >= maxScore:
-            maxScore = score
+        # score = sum(c)
+        if c > bestCharacter:
+            bestCharacter = c
             print(f'Trial {i:3d}')
-            print(f'Sum   {score:3d}')
-            printCharacter(c)
+            print(c)
 
 
 if __name__ == '__main__':
