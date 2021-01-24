@@ -1,1 +1,1 @@
-cp -vpu dnd-dice /usr/local/bin
+cp -vpu dnd-dice ~/.local/bin

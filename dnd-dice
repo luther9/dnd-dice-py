@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 from random import Random
@@ -14,16 +14,16 @@ parser.add_argument(
     'd', nargs='?', default=20, type=int,
     help='The number of sides on each die')
 parser.add_argument(
-    '-c', action='store_true',
-    help='Generate character stats')
+    '-character',
+    action='store_true',
+    help='Generate character stats',
+)
 parser.add_argument(
     '-sort',
     action='store_true',
     help='Sort the output',
 )
-parser.add_argument(
-    '-s', type=int,
-    help='The RNG seed')
+parser.add_argument('-seed', type=int, help='The RNG seed')
 
 
 def reverse_sort(iterable):
@@ -48,8 +48,8 @@ def printIter(iterable):
 
 def main():
     args = parser.parse_args()
-    rng = Random(args.s)
-    if args.c:
+    rng = Random(args.seed)
+    if args.character:
         stats = tuple(ability_score(rng) for _ in range(6))
         if args.sort:
             printIter(a[0] for a in stats)
@@ -65,4 +65,6 @@ def main():
         roll = roll_dice(rng, args.n, args.d)
         print(reverse_sort(roll) if args.sort else roll)
         print(sum(roll))
+
+
 main()
