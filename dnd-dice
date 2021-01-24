@@ -42,8 +42,7 @@ def ability_score(rng):
 
 def printIter(iterable):
     """Print each item on a line."""
-    for x in iterable:
-        print(x)
+    print(*iterable, sep='\n')
 
 
 def main():
@@ -52,8 +51,11 @@ def main():
     if args.character:
         stats = tuple(ability_score(rng) for _ in range(6))
         if args.sort:
-            printIter(a[0] for a in stats)
-            print(reverse_sort(s[1] for s in stats))
+            print(
+                *(a[0] for a in stats),
+                reverse_sort(s[1] for s in stats),
+                sep='\n',
+            )
         else:
             printIter(
                 f'{name} {score:2} {roll}'
@@ -63,8 +65,7 @@ def main():
             )
     else:
         roll = roll_dice(rng, args.n, args.d)
-        print(reverse_sort(roll) if args.sort else roll)
-        print(sum(roll))
+        print(reverse_sort(roll) if args.sort else roll, sum(roll), sep='\n')
 
 
 main()

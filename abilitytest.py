@@ -20,7 +20,7 @@ def printCharacter(c):
 
 
 def main(n):
-    bestCharacter = [0] * 6
+    bestCharacter = []
     rng = Random(1)
     for i in range(int(n)):
         c = character(rng)
